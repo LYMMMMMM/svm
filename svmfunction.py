@@ -57,27 +57,26 @@ def svmTrain(X, y, C, kernel_funtion, tol=1e-3, max_passes=5):
     while passes < max_passes:
         num_changed_alphas = 0
         for i in range(0, m):
-            E[i] = b + sum(alphas * y * K[:, [i]]) - y[i]
+            E[i, 0] = b + sum(alphas * y * K[:, [i]]) - y[i, 0]
 
-            if (y[i] * E[i] < -tol and alphas[i] < C) or \
-                    (y[i] * E[i] > tol and alphas[i] > 0):
+            if (y[i, 0] * E[i, 0] < -tol and alphas[i, 0] < C) or \
+                    (y[i, 0] * E[i, 0] > tol and alphas[i, 0] > 0):
 
                 j = int(floor(m * random.rand()))
                 while j == i:
                     j = int(floor(m * random.rand()))
 
+                E[j, 0] = b + sum(alphas * y * K[:, [j]]) - y[j, 0]
 
-                E[j] = b + sum(alphas * y * K[:, [j]]) - y[j]
+                alpha_i_old = alphas[i, 0]
+                alpha_j_old = alphas[j, 0]
 
-                alpha_i_old = alphas[i]
-                alpha_j_old = alphas[j]
-
-                if y[i] == y[j]:
-                    L = max(0, alphas[j] + alphas[i] - C)
-                    H = min(C, alphas[j] + alphas[i])
+                if y[i, 0] == y[j, 0]:
+                    L = max(0, alphas[j, 0] + alphas[i, 0] - C)
+                    H = min(C, alphas[j, 0] + alphas[i, 0])
                 else:
-                    L = max(0, alphas[j] - alphas[i])
-                    H = min(C, C + alphas[j] - alphas[i])
+                    L = max(0, alphas[j, 0] - alphas[i, 0])
+                    H = min(C, C + alphas[j, 0] - alphas[i, 0])
 
                 if L == H:
                     continue
@@ -86,29 +85,27 @@ def svmTrain(X, y, C, kernel_funtion, tol=1e-3, max_passes=5):
                 if eta >= 0:
                     continue
 
-                alphas[j] = alphas[j] - (y[j] * (E[i] - E[j])) / eta
+                alphas[j, 0] = alphas[j, 0] - (y[j, 0] * (E[i, 0] - E[j, 0])) / eta
 
-                alphas[j] = min(H, alphas[j])
-                alphas[j] = max(L, alphas[j])
+                alphas[j, 0] = min(H, alphas[j, 0])
+                alphas[j, 0] = max(L, alphas[j, 0])
 
-                if abs(alphas[j] - alpha_j_old) < tol:
-                    alphas[j] = alpha_j_old
+                if abs(alphas[j, 0] - alpha_j_old) < tol:
+                    alphas[j, 0] = alpha_j_old
                     continue
 
-                count+=1 # ####################上面写错了
+                alphas[i, 0] = alphas[i, 0] + y[i, 0] * y[j, 0] * (alpha_j_old - alphas[j, 0])
 
-                alphas[i] = alphas[i] + y[i] * y[j] * (alpha_j_old - alphas[j])
+                b1 = b - E[i, 0] \
+                     - y[i, 0] * (alphas[i, 0] - alpha_i_old) * K[i, j] \
+                     - y[j, 0] * (alphas[j, 0] - alpha_j_old) * K[i, j]
+                b2 = b - E[j, 0] \
+                     - y[i, 0] * (alphas[i, 0] - alpha_i_old) * K[i, j] \
+                     - y[j, 0] * (alphas[j, 0] - alpha_j_old) * K[j, j]
 
-                b1 = b - E[i] \
-                     - y[i] * (alphas[i] - alpha_i_old) * K[i, j] \
-                     - y[j] * (alphas[j] - alpha_j_old) * K[i, j]
-                b2 = b - E[j] \
-                     - y[i] * (alphas[i] - alpha_i_old) * K[i, j] \
-                     - y[j] * (alphas[j] - alpha_j_old) * K[j, j]
-                print([b1,b2])
-                if 0 < alphas[i] < C:
+                if 0 < alphas[i, 0] < C:
                     b = b1
-                elif 0 < alphas[j] < C:
+                elif 0 < alphas[j, 0] < C:
                     b = b2
                 else:
                     b = (b1 + b2) / 2.
@@ -135,10 +132,7 @@ def svmTrain(X, y, C, kernel_funtion, tol=1e-3, max_passes=5):
     alphas = alphas[idx]
     w = dot((alphas * y).T, X).T
     model = array([(X, y, b, alphas, w)], dtype=dt)
-    # print(E)  # ######################
-    # print(w)
-    # print(b)
-    print(count)
+
     return model
 
 
