@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 def linearKernel(x1, x2):  # 线性核函数
     x1 = x1.flatten()
     x2 = x2.flatten()
-    return dot(x1, x2)
+    return sum(x1 * x2)
 
 
 def gaussianKernel(sigma):  # 高斯核,返回一个计算高斯核的函数
@@ -50,7 +50,6 @@ def svmTrain(X, y, C, kernel_funtion, tol=1e-3, max_passes=5):
                 K[i, j] = kernel_funtion(X[i, :], X[j, :])
                 K[j, i] = K[i, j]
 
-    count = 0
     # 训练模型
     print('\nTraining ...', end='')
     dots = 12
@@ -126,21 +125,48 @@ def svmTrain(X, y, C, kernel_funtion, tol=1e-3, max_passes=5):
 
     idx = nonzero(alphas > 0)[0]  # 或者可以用 idx = (alphas>0).T[0]
     dt = dtype([('X', ndarray), ('y', ndarray), ('b', 'f4'),
-                ('alphas', ndarray), ('w', ndarray)])
-    X = X[idx]
+                ('alphas', ndarray), ('w', ndarray), ('kernelFunction', str)])
+    X = X[idx]  # 二维
     y = y[idx]
     alphas = alphas[idx]
     w = dot((alphas * y).T, X).T
-    model = array([(X, y, b, alphas, w)], dtype=dt)
+    model = array([(X, y, b, alphas, w, kernel_funtion.__name__)], dtype=dt)
 
-    return model
+    return model[0]
+
+
+def svmPredict(model, X):
+    m = X.shape[0]
+    p = zeros((m, 1))
+    pred = zeros((m, 1))
+
+    if model['kernelFunction'] == 'linearKernel':
+        p = dot(X, model['w']) + model['b']
+    elif model['kernelFunction'] == 'gaussianKernel':
+        X1 = array([sum(X ** 2, axis=1)]).T
+        X2 = array([sum(model['X'] ** 2, axis=1)])
+        K = X2 - 2 * dot(X, model['X'].T) + X1
+        K =
 
 
 # 可视化决策边界
 def visualizeBoundaryLinear(X, y, model):
-    w = model[0]['w']
-    b = model[0]['b']
+    w = model['w']
+    b = model['b']
     xp = linspace(min(X[:, 0]), max(X[:, 0]), 100)
     yp = -(w[0, 0] * xp + b) / w[1, 0]
     plt.plot(xp, yp, '-b')
+    plt.show()
+
+
+def visualizeBoundary(X, y, model):
+    x1plot = linspace(min(X[:, 1]), max(X[:, 1], 100))
+    x2plot = linspace(min(X[:, 2]), max(X[:, 2]), 100)
+    X1, X2 = plt.meshgrid(x1plot, x2plot)
+    vals = zeros(X1.shape)
+    for i in range(X1.shape[1]):
+        this_x = hstack([X1[:, [i]], X2[:, [i]]])
+        vals[:, i] = svmPredict(model, this_x)  # 一维
+
+    C = plt.contour(X1, X2, vals, 1, colors='black', linewidth=0.5)
     plt.show()

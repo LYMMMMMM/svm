@@ -6,10 +6,11 @@ from numpy import *
 X, y = load_data('./ex6data1.mat')
 plot_data(X, y)
 
-
 C = 1.
-model = svmTrain(X, y, C, linearKernel, 1e-3, 20)
-visualizeBoundaryLinear(X, y, model)
+sigma = 0.1
+model = svmTrain(X, y, C, gaussianKernel(sigma))
+
+
 
 # 训练线性核
 
