@@ -7,6 +7,7 @@ def load_data(s='./ex6data1.mat'):
     data = sio.loadmat(s)
     X = data['X']
     y = data['y']
+    y = y.astype(int)
     return X, y
 
 

@@ -1,4 +1,5 @@
 from numpy import *
+import matplotlib.pyplot as plt
 
 
 def linearKernel(x1, x2):  # 线性核函数
@@ -24,15 +25,16 @@ def svmTrain(X, y, C, kernel_funtion, tol=1e-3, max_passes=5):
     n = X.shape[1]
 
     # 将y中的0变成-1
+    y = y.astype(int)
     y[y == 0] = -1
 
     # 变量
     alphas = zeros([m, 1])  # m*1
-    b = 0
+    b = 0.
     E = zeros([m, 1])
     passes = 0
-    eta = 0
-    L = 0
+    eta = 0.
+    L = 0.
 
     # 计算特征K矩阵  m*m
     if kernel_funtion.__name__ == 'linearKernel':
@@ -49,7 +51,7 @@ def svmTrain(X, y, C, kernel_funtion, tol=1e-3, max_passes=5):
                 K[j, i] = K[i, j]
 
     # 训练模型
-    print('\nTraining ...')
+    print('\nTraining ...', end='')
     dots = 12
     while passes < max_passes:
         num_changed_alphas = 0
@@ -57,8 +59,10 @@ def svmTrain(X, y, C, kernel_funtion, tol=1e-3, max_passes=5):
             E[i] = b + sum(alphas * y * K[:, i]) - y[i]
 
             if (y[i] * E[i] < -tol and alphas[i] < C) or \
-                    (y[i] * E[i] > tol and alphas[i] > C):
-                j = floor(m * random.rand())
+                    (y[i] * E[i] > tol and alphas[i] > 0):
+                j = int(floor(m * random.rand()))
+                while j == i:
+                    j = int(floor(m * random.rand()))
 
                 E[j] = b + sum(alphas * y * K[:, j]) - y[j]
 
@@ -68,6 +72,73 @@ def svmTrain(X, y, C, kernel_funtion, tol=1e-3, max_passes=5):
                 if y[i] == y[j]:
                     L = max(0, alphas[j] + alphas[i] - C)
                     H = min(C, alphas[j] + alphas[i])
-                elif:
+                else:
                     L = max(0, alphas[j] - alphas[i])
                     H = min(C, C + alphas[j] - alphas[i])
+
+                if L == H:
+                    continue
+
+                eta = 2 * K[i, j] - K[i, i] - K[j, j]
+                if eta >= 0:
+                    continue
+
+                alphas[j] = alphas[j] - (y[j] * (E[i] - E[j])) / eta
+
+                alphas[j] = min(H, alphas[j])
+                alphas[j] = max(L, alphas[j])
+
+                if abs(alphas[j] - alpha_j_old) < tol:
+                    alphas[j] = alpha_j_old
+                    continue
+
+                alphas[i] = alphas[i] + y[i] * y[j] * (alpha_j_old - alphas[j])
+
+                b1 = b - E[i] \
+                     - y[i] * (alphas[i] - alpha_i_old) * K[i, j] \
+                     - y[j] * (alphas[j] - alpha_j_old) * K[j, j]
+                b2 = b - E[j] \
+                     - y[i] * (alphas[i] - alpha_i_old) * K[i, j] \
+                     - y[j] * (alphas[j] - alpha_j_old) * K[j, j]
+
+                if 0 < alphas[i] < C:
+                    b = b1
+                elif 0 < alphas[j] < C:
+                    b = b2
+                else:
+                    b = (b1 + b2) / 2.
+
+                num_changed_alphas += 1
+
+        if num_changed_alphas == 0:
+            passes += 1
+        else:
+            passes = 0
+
+        print('.', end='')
+        dots = dots + 1
+        if dots > 78:
+            dots = 0
+            print('\n', end='')
+    print('Done!\n')
+
+    idx = nonzero(alphas > 0)[0]  # 或者可以用 idx = (alphas>0).T[0]
+    dt = dtype([('X', ndarray), ('y', ndarray), ('b', 'f4'),
+                ('alphas', ndarray), ('w', ndarray)])
+    X = X[idx]
+    y = y[idx]
+    alphas = alphas[idx]
+    w = dot((alphas * y).T, X).T
+    model = array([(X, y, b, alphas, w)], dtype=dt)
+
+    return model
+
+
+# 可视化决策边界
+def visualizeBoundaryLinear(X, y, model):
+    w = model[0]['w']
+    b = model[0]['b']
+    xp = linspace(min(X[:, 0]), max(X[:, 0]), 100)
+    yp = -(w[0, 0] * xp + b) / w[1, 0]
+    plt.plot(xp, yp, '-b')
+    plt.show()
