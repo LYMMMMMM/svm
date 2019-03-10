@@ -50,21 +50,24 @@ def svmTrain(X, y, C, kernel_funtion, tol=1e-3, max_passes=5):
                 K[i, j] = kernel_funtion(X[i, :], X[j, :])
                 K[j, i] = K[i, j]
 
+    count = 0
     # 训练模型
     print('\nTraining ...', end='')
     dots = 12
     while passes < max_passes:
         num_changed_alphas = 0
         for i in range(0, m):
-            E[i] = b + sum(alphas * y * K[:, i]) - y[i]
+            E[i] = b + sum(alphas * y * K[:, [i]]) - y[i]
 
             if (y[i] * E[i] < -tol and alphas[i] < C) or \
                     (y[i] * E[i] > tol and alphas[i] > 0):
+
                 j = int(floor(m * random.rand()))
                 while j == i:
                     j = int(floor(m * random.rand()))
 
-                E[j] = b + sum(alphas * y * K[:, j]) - y[j]
+
+                E[j] = b + sum(alphas * y * K[:, [j]]) - y[j]
 
                 alpha_i_old = alphas[i]
                 alpha_j_old = alphas[j]
@@ -92,15 +95,17 @@ def svmTrain(X, y, C, kernel_funtion, tol=1e-3, max_passes=5):
                     alphas[j] = alpha_j_old
                     continue
 
+                count+=1 # ####################上面写错了
+
                 alphas[i] = alphas[i] + y[i] * y[j] * (alpha_j_old - alphas[j])
 
                 b1 = b - E[i] \
                      - y[i] * (alphas[i] - alpha_i_old) * K[i, j] \
-                     - y[j] * (alphas[j] - alpha_j_old) * K[j, j]
+                     - y[j] * (alphas[j] - alpha_j_old) * K[i, j]
                 b2 = b - E[j] \
                      - y[i] * (alphas[i] - alpha_i_old) * K[i, j] \
                      - y[j] * (alphas[j] - alpha_j_old) * K[j, j]
-
+                print([b1,b2])
                 if 0 < alphas[i] < C:
                     b = b1
                 elif 0 < alphas[j] < C:
@@ -130,7 +135,10 @@ def svmTrain(X, y, C, kernel_funtion, tol=1e-3, max_passes=5):
     alphas = alphas[idx]
     w = dot((alphas * y).T, X).T
     model = array([(X, y, b, alphas, w)], dtype=dt)
-
+    # print(E)  # ######################
+    # print(w)
+    # print(b)
+    print(count)
     return model
 
 
