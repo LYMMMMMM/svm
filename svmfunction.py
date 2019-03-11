@@ -19,7 +19,7 @@ def gaussianKernel(sigma):  # 高斯核,返回一个计算高斯核的函数
     return gaussianKernel
 
 
-def svmTrain(X, y, C, kernel_funtion, tol=1e-3, max_passes=5):
+def svmTrain(X, y, C, kernel_function, tol=1e-3, max_passes=5):
     # 训练集大小m以及特征向量大小n
     m = X.shape[0]
     n = X.shape[1]
@@ -37,17 +37,17 @@ def svmTrain(X, y, C, kernel_funtion, tol=1e-3, max_passes=5):
     L = 0.
 
     # 计算特征K矩阵  m*m
-    if kernel_funtion.__name__ == 'linearKernel':
+    if kernel_function.__name__ == 'linearKernel':
         K = dot(X, X.T)
-    elif kernel_funtion.__name__ == 'gaussianKernel':
+    elif kernel_function.__name__ == 'gaussianKernel':
         X2 = array([sum(X ** 2, 1)])  # 每个特征向量的模平方m*1
         K = -2 * X.dot(X.T) + X2 + X2.T
-        K = kernel_funtion(1, 0) ** K
+        K = kernel_function(1, 0) ** K
     else:
         K = zeros([m, m])
         for i in range(0, m):
             for j in range(0, m):
-                K[i, j] = kernel_funtion(X[i, :], X[j, :])
+                K[i, j] = kernel_function(X[i, :], X[j, :])
                 K[j, i] = K[i, j]
 
     # 训练模型
@@ -124,35 +124,61 @@ def svmTrain(X, y, C, kernel_funtion, tol=1e-3, max_passes=5):
     print('Done!\n')
 
     idx = nonzero(alphas > 0)[0]  # 或者可以用 idx = (alphas>0).T[0]
-    dt = dtype([('X', ndarray), ('y', ndarray), ('b', 'f4'),
-                ('alphas', ndarray), ('w', ndarray), ('kernelFunction', str)])
-    X = X[idx]  # 二维
+    X = X[idx]  # m'*n
     y = y[idx]
     alphas = alphas[idx]
-    w = dot((alphas * y).T, X).T
-    model = array([(X, y, b, alphas, w, kernel_funtion.__name__)], dtype=dt)
+    w = dot((alphas * y).T, X).T  # 2*1
 
-    return model[0]
+    class Model:
+        def __init__(self, X, y, b, alphas, w, kernel_func):
+            Model.X = X
+            Model.y = y
+            Model.b = b
+            Model.alphas = alphas
+            Model.w = w
+
+            def kernel_function(self, x1, x2):
+                return kernel_func(x1, x2)
+
+            Model.kernel_function = kernel_function
+            Model.kernel_function.__name__ = kernel_func.__name__
+
+    model = Model(X, y, b, alphas, w, kernel_function)
+    return model
 
 
 def svmPredict(model, X):
     m = X.shape[0]
-    p = zeros((m, 1))
     pred = zeros((m, 1))
+    p = zeros((m, 1))
 
-    if model['kernelFunction'] == 'linearKernel':
-        p = dot(X, model['w']) + model['b']
-    elif model['kernelFunction'] == 'gaussianKernel':
-        X1 = array([sum(X ** 2, axis=1)]).T
-        X2 = array([sum(model['X'] ** 2, axis=1)])
-        K = X2 - 2 * dot(X, model['X'].T) + X1
-        K =
+    if model.kernel_function.__name__ == 'linearKernel':
+        p = dot(X, model.w) + model.b
+    elif model.kernel_function.__name__ == 'gaussianKernel':
+        X1 = array([sum(X ** 2, axis=1)]).T  # m*1
+        X2 = array([sum(model.X ** 2, axis=1)])  # 1*m'
+        K = X2 - 2 * dot(X, model.X.T) + X1  # X(m*n), model.X(m'*n), K(m*m')
+        K = (model.kernel_function(1, 0)) ** K
+        K = (model.y.T * K) * model.alphas.T
+        p = array([sum(K, axis=1)]).T  # m*1
+    else:
+        for i in range(m):
+            prediction = 0
+            for j in range(model.X.shape[0]):
+                prediction = prediction + \
+                             model.alphas[j, 0] * model.y[j, 0] * \
+                             model.kernel_function(X[i], model.X[j])
+            p[i] = prediction + model.b
 
+    # Convert predictions into 0 / 1
+    pred[p >= 0] = 1
+    pred[p < 0] = 0
+    return pred
 
 # 可视化决策边界
 def visualizeBoundaryLinear(X, y, model):
-    w = model['w']
-    b = model['b']
+    w = model.w
+    b = model.b
     xp = linspace(min(X[:, 0]), max(X[:, 0]), 100)
     yp = -(w[0, 0] * xp + b) / w[1, 0]
     plt.plot(xp, yp, '-b')
@@ -160,13 +186,13 @@ def visualizeBoundaryLinear(X, y, model):
 
 
 def visualizeBoundary(X, y, model):
-    x1plot = linspace(min(X[:, 1]), max(X[:, 1], 100))
-    x2plot = linspace(min(X[:, 2]), max(X[:, 2]), 100)
-    X1, X2 = plt.meshgrid(x1plot, x2plot)
+    x1plot = linspace(min(X[:, 0]), max(X[:, 0]), 100)
+    x2plot = linspace(min(X[:, 1]), max(X[:, 1]), 100)
+    X1, X2 = meshgrid(x1plot, x2plot)
     vals = zeros(X1.shape)
     for i in range(X1.shape[1]):
         this_x = hstack([X1[:, [i]], X2[:, [i]]])
-        vals[:, i] = svmPredict(model, this_x)  # 一维
+        vals[:, [i]] = svmPredict(model, this_x)  # 一维
 
-    C = plt.contour(X1, X2, vals, 1, colors='black', linewidth=0.5)
+    C = plt.contour(X1, X2, vals, 1, colors='black', linewidths=0.5)
     plt.show()

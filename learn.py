@@ -9,5 +9,7 @@ def f(x):
 print(abs(-2))
 a = globals().get('f')
 
-print(array([sum(x,axis = 1)]))
+
+x[array([0])] = 0
+print(x)
 
