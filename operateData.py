@@ -11,6 +11,16 @@ def load_data(s='./ex6data1.mat'):
     return X, y
 
 
+def load_data3(s='./ex6data3.mat'):
+    data = sio.loadmat(s)
+    X = data['X']
+    y = data['y']
+    Xval = data['Xval']
+    yval = data['yval']
+    y = y.astype(int)
+    yval = yval.astype(int)
+    return X, y, Xval, yval
+
 def plot_data(X, y):
     pos = np.nonzero(y)
     neg = np.nonzero(y == 0)

@@ -19,7 +19,7 @@ def gaussianKernel(sigma):  # 高斯核,返回一个计算高斯核的函数
     return gaussianKernel
 
 
-def svmTrain(X, y, C, kernel_function, tol=1e-3, max_passes=5):
+def svmTrain(X, y, C, kernel_function, tol=1e-3, max_passes=5, screen=True):
     # 训练集大小m以及特征向量大小n
     m = X.shape[0]
     n = X.shape[1]
@@ -51,8 +51,9 @@ def svmTrain(X, y, C, kernel_function, tol=1e-3, max_passes=5):
                 K[j, i] = K[i, j]
 
     # 训练模型
-    print('\nTraining ...', end='')
-    dots = 12
+    if screen:
+        print('\nTraining ...', end='')
+        dots = 12
     while passes < max_passes:
         num_changed_alphas = 0
         for i in range(0, m):
@@ -116,12 +117,14 @@ def svmTrain(X, y, C, kernel_function, tol=1e-3, max_passes=5):
         else:
             passes = 0
 
-        print('.', end='')
-        dots = dots + 1
-        if dots > 78:
-            dots = 0
-            print('\n', end='')
-    print('Done!\n')
+        if screen:
+            print('.', end='')
+            dots = dots + 1
+            if dots > 78:
+                dots = 0
+                print('\n', end='')
+    if screen:
+        print('Done!')
 
     idx = nonzero(alphas > 0)[0]  # 或者可以用 idx = (alphas>0).T[0]
     X = X[idx]  # m'*n
@@ -173,7 +176,35 @@ def svmPredict(model, X):
     # Convert predictions into 0 / 1
     pred[p >= 0] = 1
     pred[p < 0] = 0
-    return pred
+    return pred  # m*1
+
+
+# 针对高斯核函数 测试不同的参数C，sigma,
+def optimizeParams(X, y, Xval, yval):
+    C = 1
+    sigma = 0.3
+    error = 1
+    # count = 0.
+    # print('Training...%s' % str(0) + '%', end='\r')
+    for C_temp in [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30]:
+        for sigma_temp in [0.1, 0.3, 1, 3, 10, 30]:
+            model = svmTrain(X, y, C_temp, gaussianKernel(sigma_temp), screen=False)
+            predictions = svmPredict(model, Xval)
+
+            error_temp = float(mean(double(predictions != yval)))
+            if error_temp < error:
+                C = C_temp
+                sigma = sigma_temp
+                error = error_temp
+            print('c:%0.3f ; sigma:%0.3f  ; error:%0.4f ; minimum error:%0.4f'
+                  % (C_temp, sigma_temp, error_temp, error))
+            # 显示百分制表示的进度
+            # count += 1
+            # percent = round(count / 48. * 100, 2)
+            # print('Training...%s' % str(percent) + '%  ', end='\r')
+    print('\nDone!')
+    return C, sigma
+
 
 # 可视化决策边界
 def visualizeBoundaryLinear(X, y, model):
