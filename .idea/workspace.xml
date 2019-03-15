@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e14fa603-6c28-4b2a-8e3a-9b0bbded8f07" name="默认更改列表" comment="" />
+    <list default="true" id="e14fa603-6c28-4b2a-8e3a-9b0bbded8f07" name="默认更改列表" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -9,7 +11,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/SVM$main3.coverage" NAME="main3 Coverage Results" MODIFIED="1552285730810" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/SVM$main3.coverage" NAME="main3 Coverage Results" MODIFIED="1552289384862" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/SVM$learn.coverage" NAME="learn Coverage Results" MODIFIED="1552281442024" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/SVM$main2.coverage" NAME="main2 Coverage Results" MODIFIED="1552284338126" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/SVM$pri.coverage" NAME="pri Coverage Results" MODIFIED="1552136853803" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -38,7 +40,7 @@
         <entry file="file://$PROJECT_DIR$/learn.py">
           <provider selected="true" editor-type-id="text-editor">
             <state>
-              <caret column="14" lean-forward="true" selection-start-column="14" selection-end-column="14" />
+              <caret column="14" selection-start-column="14" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -52,11 +54,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main3.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+            <state relative-caret-position="189">
+              <caret line="7" column="43" selection-start-line="7" selection-start-column="43" selection-end-line="7" selection-end-column="43" />
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
               </folding>
@@ -64,19 +66,14 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/svmfunction.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="344">
-              <caret line="206" lean-forward="true" selection-start-line="206" selection-end-line="206" />
+            <state relative-caret-position="5481">
+              <caret line="206" selection-start-line="206" selection-end-line="206" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
                 <element signature="e#93#156#0" />
-                <element signature="e#505#4097#0" />
-                <element signature="e#4301#5274#0" />
-                <element signature="e#5442#5978#0" />
-                <element signature="e#4456#4621#0" />
-                <element signature="e#5477#5875#0" />
               </folding>
             </state>
           </provider>
@@ -85,7 +82,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/operateData.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="89">
+            <state relative-caret-position="405">
               <caret line="17" column="18" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
               <folding>
                 <element signature="e#0#22#0" expanded="true" />
@@ -128,9 +125,9 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="203" />
-    <option name="y" value="-16" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="589" />
+    <option name="y" value="83" />
     <option name="width" value="1052" />
     <option name="height" value="766" />
   </component>
@@ -147,6 +144,11 @@
             <path>
               <item name="SVM" type="b2602c69:ProjectViewProjectNode" />
               <item name="SVM" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SVM" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SVM" type="462c0819:PsiDirectoryNode" />
+              <item name="MnistData" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -209,7 +211,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/learn.py" />
+      <option name="SCRIPT_NAME" value="D:\Github\SVM\ex6\learn.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -231,7 +233,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="D:\Github\SVM\main2.py" />
+      <option name="SCRIPT_NAME" value="D:\Github\SVM\ex6\main2.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -253,7 +255,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main2.py" />
+      <option name="SCRIPT_NAME" value="D:\Github\SVM\ex6\main2.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -275,7 +277,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main3.py" />
+      <option name="SCRIPT_NAME" value="D:\Github\SVM\ex6\main3.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -297,7 +299,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="D:\Github\SVM\operateData.py" />
+      <option name="SCRIPT_NAME" value="D:\Github\SVM\ex6\operateData.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -331,11 +333,13 @@
       <workItem from="1552182750738" duration="23909000" />
       <workItem from="1552221630628" duration="10944000" />
       <workItem from="1552269264742" duration="14362000" />
+      <workItem from="1552289300691" duration="396000" />
+      <workItem from="1552630381159" duration="606000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="63450000" />
+    <option name="totallyTimeSpent" value="64452000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -347,15 +351,14 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
-    <editor active="true" />
+    <frame x="451" y="91" width="1052" height="766" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49868765" visible="true" weight="0.15658094" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49868765" visible="true" weight="0.43245968" />
       <window_info id="Structure" order="1" sideWeight="0.5013123" side_tool="true" weight="0.11951589" />
       <window_info id="Favorites" order="2" sideWeight="0.5013123" side_tool="true" weight="0.11951589" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3110048" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3110048" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -370,7 +373,7 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" x="284" y="119" width="967" height="639" id="SciView" order="3" show_stripe_button="false" type="FLOATING" weight="0.21558245" />
+      <window_info anchor="right" x="284" y="119" width="967" height="639" id="SciView" order="3" visible="true" weight="0.23689516" />
       <window_info anchor="right" id="Database" order="4" weight="0.32980332" />
     </layout>
   </component>
@@ -406,13 +409,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/operateData.py">
+    <entry file="file://$PROJECT_DIR$/learn.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="89">
-          <caret line="17" column="18" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
-          <folding>
-            <element signature="e#0#22#0" expanded="true" />
-          </folding>
+        <state>
+          <caret column="14" selection-start-column="14" selection-end-column="14" />
         </state>
       </provider>
     </entry>
@@ -423,35 +423,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/learn.py">
+    <entry file="file://$PROJECT_DIR$/svmfunction.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="14" lean-forward="true" selection-start-column="14" selection-end-column="14" />
+        <state relative-caret-position="5481">
+          <caret line="206" selection-start-line="206" selection-end-line="206" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#93#156#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/operateData.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="17" column="18" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main3.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+        <state relative-caret-position="189">
+          <caret line="7" column="43" selection-start-line="7" selection-start-column="43" selection-end-line="7" selection-end-column="43" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/svmfunction.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="206" lean-forward="true" selection-start-line="206" selection-end-line="206" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-            <element signature="e#93#156#0" />
-            <element signature="e#505#4097#0" />
-            <element signature="e#4301#5274#0" />
-            <element signature="e#5442#5978#0" />
-            <element signature="e#4456#4621#0" />
-            <element signature="e#5477#5875#0" />
           </folding>
         </state>
       </provider>
