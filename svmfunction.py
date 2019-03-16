@@ -2,6 +2,21 @@ from numpy import *
 import matplotlib.pyplot as plt
 
 
+class Model:
+    def __init__(self, X, y, b, alphas, w, kernel_func):
+        self.X = X
+        self.y = y
+        self.b = b
+        self.alphas = alphas
+        self.w = w
+
+        def kernel_function(self, x1, x2):
+            return kernel_func(x1, x2)
+
+        Model.kernel_function = kernel_function
+        Model.kernel_function.__name__ = kernel_func.__name__
+
+
 def linearKernel(x1, x2):  # 线性核函数
     x1 = x1.flatten()
     x2 = x2.flatten()
@@ -131,23 +146,17 @@ def svmTrain(X, y, C, kernel_function, tol=1e-3, max_passes=5, screen=True):
     y = y[idx]
     alphas = alphas[idx]
     w = dot((alphas * y).T, X).T  # 2*1
-
-    class Model:
-        def __init__(self, X, y, b, alphas, w, kernel_func):
-            Model.X = X
-            Model.y = y
-            Model.b = b
-            Model.alphas = alphas
-            Model.w = w
-
-            def kernel_function(self, x1, x2):
-                return kernel_func(x1, x2)
-
-            Model.kernel_function = kernel_function
-            Model.kernel_function.__name__ = kernel_func.__name__
-
     model = Model(X, y, b, alphas, w, kernel_function)
+
     return model
+
+
+def svmTrain_one2n(X, y, C, kernel_function, tol=1e-3, max_passes=5, screen=True):
+    model_list = []
+    for i in range(10):
+        y_i = (y == i).astype(int)
+        model_list.append(svmTrain(X, y_i, C, kernel_function, tol, max_passes, screen))
+    return model_list
 
 
 def svmPredict(model, X):
@@ -176,9 +185,33 @@ def svmPredict(model, X):
     # Convert predictions into 0 / 1
     pred[p >= 0] = 1
     pred[p < 0] = 0
-
     return pred  # m*1
 
+
+def svmPredict_one2n(model, X):
+    m = X.shape[0]
+    p = zeros((m, 10))
+
+    for k in range(10):
+        if model[k].kernel_function.__name__ == 'linearKernel':
+            p[:, [k]] = dot(X, model[k].w) + model[k].b
+        elif model[k].kernel_function.__name__ == 'gaussianKernel':
+            X1 = array([sum(X ** 2, axis=1)]).T  # m*1
+            X2 = array([sum(model[k].X ** 2, axis=1)])  # 1*m'
+            K = X2 - 2 * dot(X, model[k].X.T) + X1  # X(m*n), model.X(m'*n), K(m*m')
+            K = (model[k].kernel_function(1, 0)) ** K
+            K = (model[k].y.T * K) * model[k].alphas.T
+            p[:, [k]] = array([sum(K, axis=1)]).T  # m*1
+        else:
+            for i in range(m):
+                prediction = 0
+                for j in range(model[k].X.shape[0]):
+                    prediction = prediction + \
+                                 model[k].alphas[j, 0] * model[k].y[j, 0] * \
+                                 model[k].kernel_function(X[i], model[k].X[j])
+                p[i, [k]] = prediction + model[k].b
+    pred = array([argmax(p, axis=1)]).T
+    return pred  # m*1
 
 # 针对高斯核函数 测试不同的参数C，sigma,
 def optimizeParams(X, y, Xval, yval):
@@ -191,6 +224,32 @@ def optimizeParams(X, y, Xval, yval):
         for sigma_temp in [0.1, 0.3, 1, 3, 10, 30]:
             model = svmTrain(X, y, C_temp, gaussianKernel(sigma_temp), screen=False)
             predictions = svmPredict(model, Xval)
+
+            error_temp = float(mean(double(predictions != yval)))
+            if error_temp < error:
+                C = C_temp
+                sigma = sigma_temp
+                error = error_temp
+            print('c:%0.3f ; sigma:%0.3f  ; error:%0.4f ; minimum error:%0.4f'
+                  % (C_temp, sigma_temp, error_temp, error))
+            # 显示百分制表示的进度
+            # count += 1
+            # percent = round(count / 48. * 100, 2)
+            # print('Training...%s' % str(percent) + '%  ', end='\r')
+    print('\nDone!')
+    return C, sigma
+
+
+def optimizeParams_one2n(X, y, Xval, yval):
+    C = 1
+    sigma = 0.3
+    error = 1
+    # count = 0.
+    # print('Training...%s' % str(0) + '%', end='\r')
+    for C_temp in [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30]:
+        for sigma_temp in [0.1, 0.3, 1, 3, 10, 30]:
+            model = svmTrain_one2n(X, y, C_temp, gaussianKernel(sigma_temp), screen=False)
+            predictions = svmPredict_one2n(model, Xval)
 
             error_temp = float(mean(double(predictions != yval)))
             if error_temp < error:
