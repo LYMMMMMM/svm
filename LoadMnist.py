@@ -82,6 +82,7 @@ def display_image(X, num_images):
                 = X[[curr_ex]].reshape(length, length)
             curr_ex += 1
     # 画图
+    plt.close()
     plt.imshow(display_array, 'gray')
     plt.show()
 

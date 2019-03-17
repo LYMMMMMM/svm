@@ -1,6 +1,7 @@
 from numpy import *
 import matplotlib.pyplot as plt
-
+from LoadMnist import display_image
+from re import match
 
 class Model:
     def __init__(self, X, y, b, alphas, w, kernel_func):
@@ -287,3 +288,23 @@ def visualizeBoundary(X, y, model):
 
     C = plt.contour(X1, X2, vals, 1, colors='black', linewidths=0.5)
     plt.show()
+
+
+def svmPredict_onebyone(model, X, y, num = 1):
+    """
+    :param model:模型数据
+    :param X: 要预测的图片
+    :param y: 图片的标签
+    :param num: 每次预测的图片数，默认为1
+    """
+    iter = X.shape[0]//num  # 总共可以显示iter次
+    for i in range(iter):
+        flag = input('是否继续预测？（Y/N）')
+        if match(r'^y|Y$', flag):
+            y_pred = svmPredict_one2n(model, X[i*num:(i+1)*num])
+            print(y_pred.T)
+            display_image(X[i*num:(i+1)*num], num)
+        elif match(r'n|N', flag):
+            break
+        else:
+            flag = input('输入错误，请重新输入：（Y/N）')
